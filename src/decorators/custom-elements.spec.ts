@@ -1,4 +1,3 @@
-
 import { transformer } from '../transform'
 import { customElementTransformer } from './custom-elements'
 

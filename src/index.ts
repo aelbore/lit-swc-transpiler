@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { transformer } from './transform'
 import { customElementTransformer } from './decorators/custom-elements'
 

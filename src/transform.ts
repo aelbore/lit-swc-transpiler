@@ -1,5 +1,7 @@
+/* istanbul ignore file */
 import { transformSync, plugins, Plugin } from '@swc/core'
 
+/* istanbul ignore next */
 export function transformer(code: string, 
   id: string, 
   transformers?: Plugin[]
