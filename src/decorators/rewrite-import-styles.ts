@@ -31,27 +31,29 @@ const createStylesStatement = (element: string, elements: Identifier[]) => {
   )
 }
 
-class RewrieImportStyles extends Visitor {
+class RewriteImportStyles extends Visitor {
   visitModule(e: Module) {
     const moduleItem = getClassDeclaration(e.body)
 
-    const styles = getStyles(e.body)
-    const imports = [ ...styles, ...e.body.filter(content => (!(hasStyles(content)) && swc.isImportDeclaration(content))) ]
-
-    const contents = e.body.filter(content => (!(swc.isImportDeclaration(content))))
-    imports.forEach(value => {
-      contents.unshift((value as ModuleItem))
-    })
-    
-    const elements = styles.map(style => swc.createIdentifer(style.specifiers[0].local.value))
-    contents.push(createStylesStatement(moduleItem.identifier.value, elements))
-
-    e.body = contents
+    if (moduleItem) {
+      const styles = getStyles(e.body)
+      const imports = [ ...styles, ...e.body.filter(content => (!(hasStyles(content)) && swc.isImportDeclaration(content))) ]
+  
+      const contents = e.body.filter(content => (!(swc.isImportDeclaration(content))))
+      imports.forEach(value => {
+        contents.unshift((value as ModuleItem))
+      })
+      
+      const elements = styles.map(style => swc.createIdentifer(style.specifiers[0].local.value))
+      contents.push(createStylesStatement(moduleItem.identifier.value, elements))
+  
+      e.body = contents
+    }
 
     return e
   }
 }
 
 export function rewriteImportStylesTransformer() {
-  return (program: Program) => new RewrieImportStyles().visitProgram(program)
+  return (program: Program) => new RewriteImportStyles().visitProgram(program)
 }

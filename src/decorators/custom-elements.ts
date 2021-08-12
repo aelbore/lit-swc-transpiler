@@ -23,20 +23,23 @@ const filterDecorators = (decorators: Decorator[]) => {
 class CustomElementVisitor extends Visitor {
   visitModule(e: Module) {
     const moduleItem = getClassDeclaration(e.body)
-    const decorator = moduleItem.decorators.find(decorator => hasDecorator(decorator, 'customElement')) as Decorator
+    
+    if (moduleItem) {
+      const decorator = moduleItem.decorators.find(decorator => hasDecorator(decorator, 'customElement')) as Decorator
 
-    e.body.forEach(content => {
-      if (swc.isExportDeclaration(content) && swc.isClasDeclaration(content.declaration)) {
-        content.declaration.decorators = filterDecorators(content.declaration.decorators)
-      }
-      if (swc.isClasDeclaration(content)) {
-        content.decorators = filterDecorators(content.decorators)
-      }
-    })
-
-    const tag = (decorator.expression as CallExpression).arguments[0].expression as StringLiteral
-    e.body.push(customElementStatement(tag.value, moduleItem.identifier.value))
-
+      e.body.forEach(content => {
+        if (swc.isExportDeclaration(content) && swc.isClasDeclaration(content.declaration)) {
+          content.declaration.decorators = filterDecorators(content.declaration.decorators)
+        }
+        if (swc.isClasDeclaration(content)) {
+          content.decorators = filterDecorators(content.decorators)
+        }
+      })
+  
+      const tag = (decorator.expression as CallExpression).arguments[0].expression as StringLiteral
+      e.body.push(customElementStatement(tag.value, moduleItem.identifier.value))
+    }
+    
     return e
   }
 }
