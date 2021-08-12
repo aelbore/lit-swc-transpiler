@@ -1,9 +1,9 @@
 {
-  "name": "lit-swc-transpiler",
-  "version": "1.0.1",
+  "name": "rollup-plugin-lit-transformer",
+  "version": "0.0.2",
   "description": "",
   "scripts": {
-    "build": "qoi build --dts --emptyOutDir --external @swc/core,@swc/core/Visitor",
+    "build": "qoi build --dts --emptyOutDir --external @swc/core,@swc/core/Visitor.js",
     "test": "qoi test ./src/transform.spec.ts --check-coverage"
   },
   "repository": {
@@ -25,15 +25,19 @@
   },
   "homepage": "https://github.com/aelbore/lit-swc-transpiler#readme",
   "dependencies": {
-    "swc-ast-helpers": "^0.0.2"
+    "@rollup/pluginutils": "^4.1.1",
+    "swc-ast-helpers": "^0.0.3"
   },
   "devDependencies": {
-    "@qoi/build": "^0.0.9",
-    "@qoi/test": "^0.0.8",
+    "@qoi/build": "^0.0.10",
     "@qoi/cli": "^0.0.10",
+    "@qoi/test": "^0.0.8",
     "@types/mocha": "^9.0.0",
-    "@types/node": "^16.4.13",
+    "@types/mock-fs": "^4.13.1",
+    "@types/node": "^16.6.0",
     "@types/sinon": "^10.0.2",
+    "lit": "^2.0.0-rc.2",
+    "mock-fs": "^5.0.0",
     "sinon": "^11.1.2",
     "typescript": "^4.3.5"
   },

@@ -1,8 +1,8 @@
-import type { Decorator, Module, ObjectExpression, ClassProperty, Identifier, ClassMember, Program, CallExpression, ClassDeclaration, KeyValueProperty } from '@swc/core'
-import Visitor from '@swc/core/Visitor'
+import type { Decorator, Module, ObjectExpression, ClassProperty, Identifier, ClassMember, Program, CallExpression, KeyValueProperty } from '@swc/core'
+import Visitor from '@swc/core/Visitor.js'
 
 import * as swc from 'swc-ast-helpers'
-import { hasDecorator } from '../utils'
+import { hasDecorator, isClasDeclaration, getClassDeclaration } from '../utils'
 
 const hasMemberProperty = (member: ClassMember) => 
   swc.isClassProperty(member) && member.decorators.find(decorator => hasDecorator(decorator, 'property'))
@@ -27,25 +27,31 @@ const createPropertiesStatement = (element: string, properties: KeyValueProperty
     ))
 }
 
+const updateMembers = (members: ClassMember[]) => {
+  return members.map(member => {
+    if (swc.isClassProperty(member)) {
+      member.decorators = member.decorators.filter(decorator => {
+        return swc.isCallExpression(decorator.expression) 
+          && swc.isIdentifer(decorator.expression.callee)
+          && (!(decorator.expression.callee.value.includes('property')))
+      })
+    }
+    return member
+  })
+}
+
 class ProperyDecorator extends Visitor {
   visitModule(e: Module) {
-    const moduleItem = e.body.find(content => swc.isClasDeclaration(content)) as ClassDeclaration
+    const moduleItem = getClassDeclaration(e.body)
     const members = moduleItem.body.filter(member => hasMemberProperty(member))
     const properties = createProperties(members)
 
     e.body.forEach(content => {
-      if (swc.isClasDeclaration(content)) {
-        const members = moduleItem.body.map(member => {
-          if (swc.isClassProperty(member)) {
-            member.decorators = member.decorators.filter(decorator => {
-              return swc.isCallExpression(decorator.expression) 
-                && swc.isIdentifer(decorator.expression.callee)
-                && (!(decorator.expression.callee.value.includes('property')))
-            })
-          }
-          return member
-        })
-        content.body = members
+      if (swc.isClasDeclaration(content) && isClasDeclaration(content)) {
+        content.body = updateMembers(moduleItem.body);
+      }
+      if (swc.isExportDeclaration(content) && swc.isClasDeclaration(content.declaration) && isClasDeclaration(content.declaration)) {
+        content.declaration.body = updateMembers(moduleItem.body)
       }
     })
 

@@ -8,7 +8,11 @@ describe('property decorator', () => {
   const content = `
     import { LitElement, property  } from 'lit'
 
-    class HelloWorld extends LitElement { 
+    export type Size = 'small' | 'large' | 'medium';
+    export type Variant = 'primary' | 'success';
+    export type Type = 'button' | 'submit';
+
+    export class HelloWorld extends LitElement { 
     
       @property() message: string
       

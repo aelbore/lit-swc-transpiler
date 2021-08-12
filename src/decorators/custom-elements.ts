@@ -1,9 +1,9 @@
-import type { Module, Decorator, StringLiteral, Program, ClassDeclaration, CallExpression } from '@swc/core'
-import Visitor from '@swc/core/Visitor'
+import type { Module, Decorator, StringLiteral, Program, CallExpression } from '@swc/core'
+import Visitor from '@swc/core/Visitor.js'
 
 import * as swc from 'swc-ast-helpers'
 
-import { hasDecorator } from '../utils'
+import { hasDecorator, getClassDeclaration } from '../utils'
 
 const customElementStatement = (tag: string, element: string) => {
   return swc.createExpressionStatement(
@@ -16,16 +16,21 @@ const customElementStatement = (tag: string, element: string) => {
     ))
 }
 
+const filterDecorators = (decorators: Decorator[]) => {
+  return decorators.filter(decorator => (!(hasDecorator(decorator, 'customElement'))))
+}
+
 class CustomElementVisitor extends Visitor {
   visitModule(e: Module) {
-    const moduleItem = e.body.find(content => swc.isClasDeclaration(content)) as ClassDeclaration
+    const moduleItem = getClassDeclaration(e.body)
     const decorator = moduleItem.decorators.find(decorator => hasDecorator(decorator, 'customElement')) as Decorator
 
     e.body.forEach(content => {
+      if (swc.isExportDeclaration(content) && swc.isClasDeclaration(content.declaration)) {
+        content.declaration.decorators = filterDecorators(content.declaration.decorators)
+      }
       if (swc.isClasDeclaration(content)) {
-        content.decorators = content.decorators.filter(decorator => {
-          return (!(hasDecorator(decorator, 'customElement')))
-        })
+        content.decorators = filterDecorators(content.decorators)
       }
     })
 

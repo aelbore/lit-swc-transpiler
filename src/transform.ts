@@ -17,6 +17,8 @@ export function transformer(code: string,
       target: 'es2020'
     },
     filename: id,
+    sourceMaps: true,
+    isModule: true,
     plugin: plugins(transformers || [])
   })
 }

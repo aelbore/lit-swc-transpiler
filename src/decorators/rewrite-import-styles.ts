@@ -1,7 +1,9 @@
-import type { ImportDeclaration, Program, ClassDeclaration, Module, ExprOrSpread, ModuleItem, Identifier } from '@swc/core'
-import Visitor from '@swc/core/Visitor'
+import type { ImportDeclaration, Program, Module, ExprOrSpread, ModuleItem, Identifier } from '@swc/core'
+import Visitor from '@swc/core/Visitor.js'
 
 import * as swc from 'swc-ast-helpers'
+
+import { getClassDeclaration } from '../utils'
 
 const removeQuotes = (value: string) => value.replace(/'/g, '').replace(/"/g, '')
 const randomId = () => Math.random().toString(36).substring(2);
@@ -31,7 +33,7 @@ const createStylesStatement = (element: string, elements: Identifier[]) => {
 
 class RewrieImportStyles extends Visitor {
   visitModule(e: Module) {
-    const moduleItem = e.body.find(content => swc.isClasDeclaration(content)) as ClassDeclaration
+    const moduleItem = getClassDeclaration(e.body)
 
     const styles = getStyles(e.body)
     const imports = [ ...styles, ...e.body.filter(content => (!(hasStyles(content)) && swc.isImportDeclaration(content))) ]

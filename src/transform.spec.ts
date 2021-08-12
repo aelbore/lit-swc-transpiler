@@ -1,39 +1,28 @@
-import { expect } from '@qoi/test'
+import { inlineLitElement } from './index'
 
-import { transformer } from './transform'
-import { inlinePropertyTransformer } from './decorators/property'
-import { customElementTransformer } from './decorators/custom-elements'
-import { rewriteImportStylesTransformer } from './decorators/rewrite-import-styles'
+import { rollup } from 'rollup'
+import { litCss } from 'rollup-plugin-lit-css'
 
 describe('property decorator', () => {
 
-  const html = 'html`<div>Hello ${this.message}</div>`' 
+  const build = async () => {
+    const bundle = await rollup({
+      input: './fixtures/button.ts',
+      external: [ 'lit', 'lit/decorators' ],
+      plugins: [ litCss(), inlineLitElement() ]
+    })
 
-  const content = `
-    import { LitElement, property, html  } from 'lit'
-    import './styles.css'
+    const output = await bundle.generate({
+      file: './dist/index.js',
+      format: 'es'
+    })
 
-    @customElement('hello-world')
-    class HelloWorld extends LitElement { 
-    
-      @property() message: string
-      @property({ type: Boolean }) disabled: boolean = false
-      
-      render() {
-        return ${html}
-      }
-    }  
-  `
+    return output
+  }
 
-  it('shoule transform property to static get properties', () => {
-    const output = transformer(content, './src/hello-world.ts', [ 
-      inlinePropertyTransformer(),
-      rewriteImportStylesTransformer(),
-      customElementTransformer(),
-    ])
+  it('shoule transform property to static get properties', async () => {
+    const output = await build()
 
-    console.log(output)
-
+    console.log(output.output[0].code)
   })
-
 })
