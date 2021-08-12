@@ -1,10 +1,10 @@
 {
   "name": "lit-swc-transpiler",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "",
   "scripts": {
     "build": "qoi build --dts --emptyOutDir --external @swc/core,@swc/core/Visitor",
-    "test": "qoi test ./src/decorators/custom-elements.spec.ts --check-coverage"
+    "test": "qoi test ./src/transform.spec.ts --check-coverage"
   },
   "repository": {
     "type": "git",
@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/aelbore/lit-swc-transpiler#readme",
   "dependencies": {
-    "swc-ast-helpers": "^0.0.1"
+    "swc-ast-helpers": "^0.0.2"
   },
   "devDependencies": {
     "@qoi/build": "^0.0.9",

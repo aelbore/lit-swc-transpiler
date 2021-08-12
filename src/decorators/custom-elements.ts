@@ -3,11 +3,7 @@ import Visitor from '@swc/core/Visitor'
 
 import * as swc from 'swc-ast-helpers'
 
-const hasDecorator = (decorator: Decorator) => {
-  return swc.isCallExpression(decorator.expression) 
-    && swc.isIdentifer(decorator.expression.callee)
-    && decorator.expression.callee.value.includes('customElement')
-}
+import { hasDecorator } from '../utils'
 
 const customElementStatement = (tag: string, element: string) => {
   return swc.createExpressionStatement(
@@ -23,12 +19,12 @@ const customElementStatement = (tag: string, element: string) => {
 class CustomElementVisitor extends Visitor {
   visitModule(e: Module) {
     const moduleItem = e.body.find(content => swc.isClasDeclaration(content)) as ClassDeclaration
-    const decorator = moduleItem.decorators.find(decorator => hasDecorator(decorator)) as Decorator
+    const decorator = moduleItem.decorators.find(decorator => hasDecorator(decorator, 'customElement')) as Decorator
 
     e.body.forEach(content => {
       if (swc.isClasDeclaration(content)) {
         content.decorators = content.decorators.filter(decorator => {
-          return (!(hasDecorator(decorator)))
+          return (!(hasDecorator(decorator, 'customElement')))
         })
       }
     })

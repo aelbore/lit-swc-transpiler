@@ -1351,10 +1351,10 @@ supports-color@^7.0.0, supports-color@^7.1.0, supports-color@^7.2.0:
   dependencies:
     has-flag "^4.0.0"
 
-swc-ast-helpers@^0.0.1:
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/swc-ast-helpers/-/swc-ast-helpers-0.0.1.tgz#9ee4132994bb75aaa4e73c3ee24a280a68ffd0c5"
-  integrity sha512-lfdZaOoi1wl3r53i4c94EJKQQpyGvxlTaP+Csd8BQXXDoxHWKrDraLRPRhfwElb5nVGNGY4aWMML6BGxPNT8aw==
+swc-ast-helpers@^0.0.2:
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/swc-ast-helpers/-/swc-ast-helpers-0.0.2.tgz#b856ec141a54d7ddaf260f0ae62ee7009ffa43fb"
+  integrity sha512-m2DgbQpZutrdF85Sh43+Y8HTp454KeAlWTkpqZEJ9Uzc4REjukXITnhgpw6X86XI8pjPwQYnmDwGUh5kWNDbZw==
 
 terser@^5.0.0:
   version "5.7.0"
