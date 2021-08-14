@@ -1,10 +1,10 @@
 {
   "name": "rollup-plugin-lit-transformer",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "",
   "scripts": {
     "postinstall": "qoi ./tools/visitor-es.ts",
-    "build": "qoi build --dts --emptyOutDir --external @swc/core,@swc/visitor/Visitor.js,@rollup/pluginutils",
+    "build": "qoi build --dts --emptyOutDir --resolve string-to-template-literal --external @swc/core,@swc/visitor/Visitor.js,@rollup/pluginutils",
     "test": "qoi test ./src/transform.spec.ts --check-coverage"
   },
   "repository": {
@@ -25,6 +25,9 @@
     "url": "https://github.com/aelbore/lit-swc-transpiler/issues"
   },
   "homepage": "https://github.com/aelbore/lit-swc-transpiler#readme",
+  "peerDependencies": {
+    "sass": ">=^1.37.5"
+  },
   "dependencies": {
     "swc-ast-helpers": "^0.0.3"
   },
@@ -34,11 +37,16 @@
     "@qoi/test": "^0.0.8",
     "@types/mocha": "^9.0.0",
     "@types/mock-fs": "^4.13.1",
+    "@types/mock-require": "^2.0.0",
     "@types/node": "^16.6.0",
+    "@types/sass": "^1.16.1",
     "@types/sinon": "^10.0.2",
     "lit": "^2.0.0-rc.2",
     "mock-fs": "^5.0.0",
+    "mock-require": "^3.0.3",
+    "sass": "^1.37.5",
     "sinon": "^11.1.2",
+    "string-to-template-literal": "^2.0.0",
     "typescript": "^4.3.5"
   },
   "qoi": {

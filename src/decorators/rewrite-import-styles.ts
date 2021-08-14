@@ -11,7 +11,7 @@ const randomId = () => Math.random().toString(36).substring(2);
 const hasStyles = (item: ModuleItem) => {
   return swc.isImportDeclaration(item) 
   && item.specifiers?.length < 1
-  && removeQuotes(item.source.value).includes('.css')
+  && (removeQuotes(item.source.value).includes('.css') || removeQuotes(item.source.value).includes('.scss'))
 }
 
 const getStyles = (items: ModuleItem[]) => {

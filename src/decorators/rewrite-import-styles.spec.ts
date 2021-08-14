@@ -8,9 +8,9 @@ describe('property decorator', () => {
   const content = `
     import { LitElement, property  } from 'lit'
     import './styles.css'
+    import '../styles.scss'
 
     class HelloWorld extends LitElement { 
-  
     }
   `
 
