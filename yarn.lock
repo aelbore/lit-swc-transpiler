@@ -350,10 +350,10 @@
   resolved "https://registry.yarnpkg.com/@types/node/-/node-15.0.3.tgz#ee09fcaac513576474c327da5818d421b98db88a"
   integrity sha512-/WbxFeBU+0F79z9RdEOXH4CsDga+ibi5M8uEYr91u3CkT/pdWcV8MCook+4wDPnZBexRdwWS+PiVZ2xJviAzcQ==
 
-"@types/node@^16.6.0":
-  version "16.6.0"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.6.0.tgz#0d5685f85066f94e97f19e8a67fe003c5fadacc4"
-  integrity sha512-OyiZPohMMjZEYqcVo/UJ04GyAxXOJEZO/FpzyXxcH4r/ArrVoXHf4MbUrkLp0Tz7/p1mMKpo5zJ6ZHl8XBNthQ==
+"@types/node@^16.6.1":
+  version "16.6.1"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.6.1.tgz#aee62c7b966f55fc66c7b6dfa1d58db2a616da61"
+  integrity sha512-Sr7BhXEAer9xyGuCN3Ek9eg9xPviCF2gfu9kTfuU2HkTVAMYSDeX40fvpmo72n5nansg3nsBjuQBrsS28r+NUw==
 
 "@types/resolve@1.17.1":
   version "1.17.1"
@@ -1448,10 +1448,10 @@ supports-color@^7.0.0, supports-color@^7.1.0, supports-color@^7.2.0:
   dependencies:
     has-flag "^4.0.0"
 
-swc-ast-helpers@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/swc-ast-helpers/-/swc-ast-helpers-0.0.3.tgz#19115124f9b8840f1296072183d1c1b4a1cd6803"
-  integrity sha512-ZSipUuK0/W0BRAd2N4EYjkWlM7Z4h4YcSiX13hWNA0WWHQRvWHhdUPYUDrssR76LE8SxxDgMqTVt/Smh1N9N1A==
+swc-ast-helpers@^0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/swc-ast-helpers/-/swc-ast-helpers-0.0.4.tgz#25c2dca9a4daaf631586007bd09950dbf70fac30"
+  integrity sha512-rgddjWnwwiUe1PRh/B6kzS8Dk3pQxbU63pz9MHaW77cmsOMBgAsZ6OJo/TZN57KYV/dZOPtYU3Vl1GvT2TsYVQ==
 
 terser@^5.0.0:
   version "5.7.0"

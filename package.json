@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-lit-transformer",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "",
   "scripts": {
     "postinstall": "qoi ./tools/visitor-es.ts",
@@ -29,7 +29,7 @@
     "sass": ">=^1.37.5"
   },
   "dependencies": {
-    "swc-ast-helpers": "^0.0.3"
+    "swc-ast-helpers": "^0.0.4"
   },
   "devDependencies": {
     "@qoi/build": "^0.0.10",
@@ -38,7 +38,7 @@
     "@types/mocha": "^9.0.0",
     "@types/mock-fs": "^4.13.1",
     "@types/mock-require": "^2.0.0",
-    "@types/node": "^16.6.0",
+    "@types/node": "^16.6.1",
     "@types/sass": "^1.16.1",
     "@types/sinon": "^10.0.2",
     "lit": "^2.0.0-rc.2",
