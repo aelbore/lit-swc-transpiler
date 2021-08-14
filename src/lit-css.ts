@@ -1,4 +1,4 @@
-import { extname } from 'path'
+import { extname, resolve, join } from 'path'
 import { createRequire } from 'module'
 
 import stringToTemplateLiteral from 'string-to-template-literal'
@@ -10,10 +10,14 @@ export interface LitCssOptions {
   tag?: string
 }
 
-function sassToCss(code: string, id: string) {
-  const { default: sass } = createRequire('file://')('sass')
-  const css = sass.renderSync({ data: code, file: id  }).css
+function sassToCss(data: string, file: string) {
+  const css = getSass().renderSync({ data, file }).css
   return css.toString('utf-8')
+}
+
+export function getSass() {
+  const sassPath = join(resolve('node_modules'), 'sass', 'sass.dart.js')
+  return createRequire(sassPath)(sassPath)
 }
 
 export function transform({ code, id, specifier = 'lit', tag = 'css' }: LitCssOptions) {

@@ -1,15 +1,17 @@
 import { rollup } from 'rollup'
+import { join, resolve } from 'path'
 import mockfs from 'mock-fs'
 import mock from 'mock-require'
 import stringToTemplateLiteral from 'string-to-template-literal'
 
 import { inlineLitElement } from './index'
+import { getSass } from './lit-css'
 
 describe('property decorator', () => {
 
-  before(async () => {
-    const sass = await import('sass')
-    mock('sass', sass)
+  before(() => {
+    const sassPath = join(resolve(), 'node_modules', 'sass', 'sass.dart.js')
+    mock(sassPath, getSass())
 
     mockfs({
       './button/button.ts': `
