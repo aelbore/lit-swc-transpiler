@@ -36,8 +36,8 @@ class CustomElementVisitor extends Visitor {
         }
       })
   
-      const tag = (decorator.expression as CallExpression).arguments[0].expression as StringLiteral
-      e.body.push(customElementStatement(tag.value, moduleItem.identifier.value))
+      const tag = (decorator?.expression as CallExpression)?.arguments[0]?.expression as StringLiteral
+      e.body = [ ...e.body, ...(tag ? [ customElementStatement(tag.value, moduleItem.identifier.value) ]: []) ]
     }
     
     return e

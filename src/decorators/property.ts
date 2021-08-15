@@ -47,17 +47,17 @@ class ProperyDecorator extends Visitor {
     if (moduleItem) {
       const members = moduleItem.body.filter(member => hasMemberProperty(member))
       const properties = createProperties(members)
-  
-      e.body.forEach(content => {
-        if (swc.isClasDeclaration(content) && isClasDeclaration(content)) {
-          content.body = updateMembers(moduleItem.body);
-        }
-        if (swc.isExportDeclaration(content) && swc.isClasDeclaration(content.declaration) && isClasDeclaration(content.declaration)) {
-          content.declaration.body = updateMembers(moduleItem.body)
-        }
-      })
-  
-      e.body.push(createPropertiesStatement(moduleItem.identifier.value, properties))
+      if (properties?.length > 0) {
+        e.body.forEach(content => {
+          if (swc.isClasDeclaration(content) && isClasDeclaration(content)) {
+            content.body = updateMembers(moduleItem.body);
+          }
+          if (swc.isExportDeclaration(content) && swc.isClasDeclaration(content.declaration) && isClasDeclaration(content.declaration)) {
+            content.declaration.body = updateMembers(moduleItem.body)
+          }
+        })
+        e.body.push(createPropertiesStatement(moduleItem.identifier.value, properties))
+      }
     }
 
     return e

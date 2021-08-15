@@ -34,9 +34,9 @@ const createStylesStatement = (element: string, elements: Identifier[]) => {
 class RewriteImportStyles extends Visitor {
   visitModule(e: Module) {
     const moduleItem = getClassDeclaration(e.body)
+    const styles = getStyles(e.body)
 
-    if (moduleItem) {
-      const styles = getStyles(e.body)
+    if (moduleItem && styles?.length > 0) {
       const imports = [ ...styles, ...e.body.filter(content => (!(hasStyles(content)) && swc.isImportDeclaration(content))) ]
   
       const contents = e.body.filter(content => (!(swc.isImportDeclaration(content))))
