@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-lit-transformer",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "",
   "scripts": {
     "postinstall": "qoi ./tools/visitor-es.ts",
@@ -26,22 +26,24 @@
   },
   "homepage": "https://github.com/aelbore/lit-swc-transpiler#readme",
   "peerDependencies": {
-    "sass": ">=^1.37.5"
+    "sass": ">=^1.37.5",
+    "minify-html-literals": ">=^1.3.5"
   },
   "dependencies": {
     "swc-ast-helpers": "^0.0.4"
   },
   "devDependencies": {
-    "@qoi/build": "^0.0.10",
-    "@qoi/cli": "^0.0.10",
-    "@qoi/test": "^0.0.8",
+    "@qoi/build": "^0.0.12",
+    "@qoi/cli": "^0.0.12",
+    "@qoi/test": "^0.0.9",
     "@types/mocha": "^9.0.0",
     "@types/mock-fs": "^4.13.1",
     "@types/mock-require": "^2.0.0",
-    "@types/node": "^16.6.1",
+    "@types/node": "^16.7.1",
     "@types/sass": "^1.16.1",
     "@types/sinon": "^10.0.2",
-    "lit": "^2.0.0-rc.2",
+    "lit": "^2.0.0-rc.3",
+    "minify-html-literals": "^1.3.5",
     "mock-fs": "^5.0.0",
     "mock-require": "^3.0.3",
     "sass": "^1.37.5",

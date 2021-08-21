@@ -2,13 +2,7 @@ import { extname, resolve, join } from 'path'
 import { createRequire } from 'module'
 
 import stringToTemplateLiteral from 'string-to-template-literal'
-
-export interface LitCssOptions {
-  code: string
-  id: string
-  specifier?: string
-  tag?: string
-}
+import { LitCssOptions } from './types'
 
 function sassToCss(data: string, file: string) {
   const css = getSass().renderSync({ data, file }).css

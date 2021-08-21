@@ -1,18 +1,33 @@
 /* istanbul ignore file */
-import { resolve } from 'path'
+import { resolve, join } from 'path'
+import { createFilter } from '@rollup/pluginutils'
+import { createRequire } from 'module'
 
 import { transformer } from './transform'
 import { customElementTransformer } from './decorators/custom-elements'
 import { inlinePropertyTransformer } from './decorators/property'
 import { rewriteImportStylesTransformer } from './decorators/rewrite-import-styles'
-import { LitCssOptions, transform } from './lit-css'
+import { transform } from './lit-css'
+import { Options, Output } from './types'
 
-import { createFilter } from '@rollup/pluginutils'
+const getMinifyHTMLLiterals = () => {
+  const htmlLiterals = join(resolve('node_modules'), 'minify-html-literals')
+  const { minifyHTMLLiterals } = createRequire(htmlLiterals)(htmlLiterals)
+  return minifyHTMLLiterals
+}
 
-export interface Options {
-  enforce?: 'pre' | 'post'
-  swcOptions?: import('@swc/core').Options
-  litcss?: Omit<LitCssOptions, 'code' | 'id'>
+const transformStyle = (code: string, id: string, options?: Options) => {
+  const style = transform({ code, id, ...(options?.litcss || {}) }) as Output
+  if (options?.minifyHTMLLiterals) {
+    const minifyHTMLLiterals = getMinifyHTMLLiterals()
+    return minifyHTMLLiterals!(style.code, { fileName: id })
+  }
+  return style
+}
+
+const getContent = (code: string, id: string, options?: Options) => {
+  const minifyHTMLLiterals = getMinifyHTMLLiterals()
+  return options?.minifyHTMLLiterals ? minifyHTMLLiterals(code, { fileName: id })?.code ?? code: code
 }
 
 export function inlineLitElement(options?: Options) {
@@ -33,8 +48,8 @@ export function inlineLitElement(options?: Options) {
     },
     transform(code: string, id: string) {
       if (!filter(id)) return null
-      if (cssFilter(id)) return transform({ code, id, ...(options?.litcss || {}) })
-      return transformer(code, id, plugins)
+      if (cssFilter(id)) return transformStyle(code, id, options)
+      return transformer(getContent(code, id, options), id, plugins)
     },
     ...(options?.enforce 
       ? { enforce: options.enforce }

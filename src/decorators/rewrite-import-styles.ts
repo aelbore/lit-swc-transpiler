@@ -26,7 +26,7 @@ const createStylesStatement = (element: string, elements: Identifier[]) => {
   return swc.createExpressionStatement(
     swc.createAssingmentExpression(
       swc.createMemberExpression(swc.createIdentifer(element), swc.createIdentifer('styles')),
-      swc.createArrayExpression(elements.map(el => ({ expression: el } as ExprOrSpread)))
+      swc.createArrayExpression(elements.map(el => ({ expression: el } as ExprOrSpread)).reverse())
     )
   )
 }

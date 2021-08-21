@@ -1,5 +1,6 @@
 import { rollup } from 'rollup'
 import { join, resolve } from 'path'
+import { minifyHTMLLiterals } from 'minify-html-literals'
 import mockfs from 'mock-fs'
 import mock from 'mock-require'
 import stringToTemplateLiteral from 'string-to-template-literal'
@@ -8,11 +9,12 @@ import { inlineLitElement } from './index'
 import { getSass } from './lit-css'
 
 describe('property decorator', () => {
+
   const build = async (input: string) => {
     const bundle = await rollup({
       input,
       external: [ 'lit', 'lit/decorators' ],
-      plugins: [ inlineLitElement() ]
+      plugins: [ inlineLitElement({ minifyHTMLLiterals: true }) ]
     })
     const output = await bundle.generate({
       file: './dist/index.js',
@@ -23,7 +25,9 @@ describe('property decorator', () => {
 
   before(() => {
     const sassPath = join(resolve(), 'node_modules', 'sass', 'sass.dart.js')
+    
     mock(sassPath, getSass())
+    mock(join(resolve('node_modules'), 'minify-html-literals'), { minifyHTMLLiterals })
   })
 
   after(() => {
@@ -99,5 +103,69 @@ describe('property decorator', () => {
     console.log(output.output[0].code)
   })
 
+  xit('should transform without decorators with import styles', async () => {
+    const html = `
+      <div class="bto--layout-header">
+        <slot></slot>
+      </div>
+    `
+
+    mockfs({
+      './src/header.ts': `
+        import { LitElement, html } from 'lit'
+        import './header.scss'
+
+        class LayoutHeader extends LitElement {
+          render() {
+            return html${stringToTemplateLiteral(html)}
+          }
+        } 
+
+        customElements.define('bto-layout-header', LayoutHeader)      
+      `,
+      './src/header.scss': `
+        .bto--layout-header {
+          height: 50px;
+          width: var(--bto-layout-header, --bto-layout);
+          border: 1px solid;
+        }      
+      `
+    })
+
+    const output = await build('./src/header.ts')
+    console.log(output.output[0].code)
+  })
+
+  xit('should transform with HTMLElement styles', async() => {
+    const html = `
+      <div class="bto--layout-header">
+        <slot></slot>
+      </div>
+    `
+
+    mockfs({
+      './src/header.ts': `
+        import './header.scss'
+
+        class LayoutHeader extends HTMLElement {
+          render() {
+            return html${stringToTemplateLiteral(html)}
+          }
+        } 
+
+        customElements.define('bto-layout-header', LayoutHeader)      
+      `,
+      './src/header.scss': `
+        .bto--layout-header {
+          height: 50px;
+          width: var(--bto-layout-header, --bto-layout);
+          border: 1px solid;
+        }      
+      `
+    })
+
+    const output = await build('./src/header.ts')
+    console.log(output.output[0].code)    
+  })
 
 })
