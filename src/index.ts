@@ -26,8 +26,11 @@ const transformStyle = (code: string, id: string, options?: Options) => {
 }
 
 const getContent = (code: string, id: string, options?: Options) => {
-  const minifyHTMLLiterals = getMinifyHTMLLiterals()
-  return options?.minifyHTMLLiterals ? minifyHTMLLiterals(code, { fileName: id })?.code ?? code: code
+  if (options?.minifyHTMLLiterals) {
+    const minifyHTMLLiterals = getMinifyHTMLLiterals()
+    return minifyHTMLLiterals(code, { fileName: id })?.code ?? code
+  }
+  return code
 }
 
 export function inlineLitElement(options?: Options) {
@@ -37,7 +40,7 @@ export function inlineLitElement(options?: Options) {
   const plugins: import('@swc/core').Plugin[] = [
     inlinePropertyTransformer(),
     rewriteImportStylesTransformer(),
-    customElementTransformer(),
+    customElementTransformer()
   ]
 
   const plugin: import('rollup').Plugin = {
