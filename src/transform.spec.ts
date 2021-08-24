@@ -1,6 +1,7 @@
-import { rollup } from 'rollup'
+import { rollup, Plugin } from 'rollup'
 import { join, resolve } from 'path'
 import { minifyHTMLLiterals } from 'minify-html-literals'
+import nodeResolve from '@rollup/plugin-node-resolve'
 import mockfs from 'mock-fs'
 import mock from 'mock-require'
 import stringToTemplateLiteral from 'string-to-template-literal'
@@ -10,11 +11,14 @@ import { getSass } from './lit-css'
 
 describe('property decorator', () => {
 
-  const build = async (input: string) => {
+  const build = async (input: string, plugins?: Plugin[]) => {
     const bundle = await rollup({
       input,
       external: [ 'lit', 'lit/decorators' ],
-      plugins: [ inlineLitElement({ minifyHTMLLiterals: true }) ]
+      plugins: [ 
+        inlineLitElement({ enforce: 'pre', minifyHTMLLiterals: true }),
+        ...(plugins || [])
+      ]
     })
     const output = await bundle.generate({
       file: './dist/index.js',
@@ -38,7 +42,7 @@ describe('property decorator', () => {
     mockfs.restore()
   })
 
-  it('shoule transform property to static get properties', async () => {
+  xit('shoule transform property to static get properties', async () => {
     mockfs({
       './button/button.ts': `
         import { LitElement } from 'lit'
@@ -165,6 +169,52 @@ describe('property decorator', () => {
     })
 
     const output = await build('./src/header.ts')
+    console.log(output.output[0].code)    
+  })
+
+  it('should transform with baseClass', async () => {
+    const html = `
+      <div class="bto--layout-header">
+        <slot></slot>
+      </div>
+    `
+
+    mockfs({
+      './src/header.ts': `
+        import { Props } from './base-class.ts'
+        import './header.scss'
+
+        export class LayoutHeader extends Props {
+          render() {
+            return html${stringToTemplateLiteral(html)}
+          }
+        } 
+
+        customElements.define('bto-layout-header', LayoutHeader)      
+      `,
+      './src/base-class.ts': `
+        export class Props extends LitElement {
+          @property({ attribute: 'header-title' }) headerTitle: string
+        
+          next(_e: Event) {
+            this.dispatchEvent(new CustomEvent('next'))
+          }
+        
+          previous(_e: Event) {
+            this.dispatchEvent(new CustomEvent('previous'))
+          }
+        }     
+      `,
+      './src/header.scss': `
+        .bto--layout-header {
+          height: 50px;
+          width: var(--bto-layout-header, --bto-layout);
+          border: 1px solid;
+        }      
+      `
+    })
+
+    const output = await build('./src/header.ts', [ nodeResolve() ])
     console.log(output.output[0].code)    
   })
 

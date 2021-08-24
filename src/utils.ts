@@ -12,9 +12,7 @@ export function hasDecorator(decorator: Decorator, text: string){
 }
 
 export function isClasDeclaration(content: ModuleItem){
-  return swc.isClasDeclaration(content)
-    && swc.isIdentifer(content.superClass)
-    && (content.superClass.value.includes('LitElement') || content.superClass.value.includes('HTMLElement'))
+  return swc.isClasDeclaration(content) && swc.isIdentifer(content.superClass)
 }
 
 export function getClassDeclaration(items: ModuleItem[]) {
