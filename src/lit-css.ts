@@ -10,7 +10,7 @@ function sassToCss(data: string, file: string) {
 }
 
 export function getSass() {
-  const sassPath = join(resolve('node_modules'), 'sass', 'sass.dart.js')
+  const sassPath = join(resolve('node_modules'), 'sass', 'sass.default.dart.js')
   return createRequire(sassPath)(sassPath)
 }
 

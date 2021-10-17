@@ -172,7 +172,7 @@ describe('property decorator', () => {
     console.log(output.output[0].code)    
   })
 
-  it('should transform with baseClass', async () => {
+  xit('should transform with baseClass', async () => {
     const html = `
       <div class="bto--layout-header">
         <slot></slot>
@@ -216,6 +216,40 @@ describe('property decorator', () => {
 
     const output = await build('./src/header.ts', [ nodeResolve() ])
     console.log(output.output[0].code)    
+  })
+
+  it('shoule transform property to static get properties and query decorator', async () => {
+    mockfs({
+      './button/button.ts': `
+        import { LitElement } from 'lit'
+        import { customElement, property } from 'lit/decorators'
+        import './button.css'
+        import '../themes.scss'
+
+        @customElement('bto-element')
+        export class HelloWorld extends LitElement { 
+          @property() message: string
+          @query('abc-menu') menu: HTMLElement
+          @queryAll('.my-class-query') classQuery: HTMLElement
+          
+          render() {
+            return html ${stringToTemplateLiteral('<p>Hello ${this.message}</p>')} 
+          }
+        }          
+      `,
+      './button/button.css': `p { color: red; }`,
+      './themes.scss': `
+        p {
+          span {
+            color: blue;
+          }
+        }
+      `
+    })
+
+    const output = await build('./button/button.ts')
+
+    console.log(output.output[0].code)
   })
 
 })

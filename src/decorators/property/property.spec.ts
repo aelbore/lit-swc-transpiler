@@ -1,6 +1,6 @@
 import { expect } from '@qoi/test'
 
-import { transformer } from '../transform'
+import { transformer } from '@/transform'
 import { inlinePropertyTransformer } from './property'
 
 describe('property decorator', () => {
@@ -22,7 +22,6 @@ describe('property decorator', () => {
   it('shoule transform property to static get properties', () => {
     const output = transformer(content, './src/hello-world.ts', [ inlinePropertyTransformer() ])
     console.log(output)
-
   })
 
 })

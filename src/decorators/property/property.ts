@@ -2,7 +2,7 @@ import type { Decorator, Module, ObjectExpression, ClassProperty, Identifier, Cl
 import Visitor from '@swc/visitor/Visitor.js'
 
 import * as swc from 'swc-ast-helpers'
-import { hasDecorator, isClasDeclaration, getClassDeclaration } from '../utils'
+import { hasDecorator, isClasDeclaration, getClassDeclaration, updateMembers } from '@/utils'
 
 const hasMemberProperty = (member: ClassMember) => 
   swc.isClassProperty(member) && member.decorators.find(decorator => hasDecorator(decorator, 'property'))
@@ -27,19 +27,6 @@ const createPropertiesStatement = (element: string, properties: KeyValueProperty
     ))
 }
 
-const updateMembers = (members: ClassMember[]) => {
-  return members.map(member => {
-    if (swc.isClassProperty(member)) {
-      member.decorators = member.decorators.filter(decorator => {
-        return swc.isCallExpression(decorator.expression) 
-          && swc.isIdentifer(decorator.expression.callee)
-          && (!(decorator.expression.callee.value.includes('property')))
-      })
-    }
-    return member
-  })
-}
-
 class ProperyDecorator extends Visitor {
   visitModule(e: Module) {
     const moduleItem = getClassDeclaration(e.body)
@@ -47,13 +34,14 @@ class ProperyDecorator extends Visitor {
     if (moduleItem) {
       const members = moduleItem.body.filter(member => hasMemberProperty(member))
       const properties = createProperties(members)
+      const toUpdateMember = () => updateMembers(moduleItem.body, ['property']);
       if (properties?.length > 0) {
         e.body.forEach(content => {
           if (swc.isClasDeclaration(content) && isClasDeclaration(content)) {
-            content.body = updateMembers(moduleItem.body);
+            content.body = toUpdateMember()
           }
           if (swc.isExportDeclaration(content) && swc.isClasDeclaration(content.declaration) && isClasDeclaration(content.declaration)) {
-            content.declaration.body = updateMembers(moduleItem.body)
+            content.declaration.body = toUpdateMember()
           }
         })
         e.body.push(createPropertiesStatement(moduleItem.identifier.value, properties))

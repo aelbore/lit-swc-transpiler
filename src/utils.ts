@@ -1,4 +1,4 @@
-import type { Decorator } from '@swc/core'
+import type { Decorator, ClassMember } from '@swc/core'
 
 import type { ModuleItem, ExportDeclaration, ClassDeclaration } from '@swc/core'
 
@@ -22,4 +22,17 @@ export function getClassDeclaration(items: ModuleItem[]) {
       ? (exportDeclaration as ExportDeclaration).declaration
       : items.find(content => isClasDeclaration(content))
   ) as ClassDeclaration
+}
+
+export function updateMembers(members: ClassMember[], membersToRemove: string[]) {
+  return members.map(member => {
+    if (swc.isClassProperty(member)) {
+      member.decorators = member.decorators.filter(decorator => {
+        return swc.isCallExpression(decorator.expression) 
+          && swc.isIdentifer(decorator.expression.callee)
+          && (!(membersToRemove.includes(decorator.expression.callee.value)))
+      })
+    }
+    return member
+  })
 }

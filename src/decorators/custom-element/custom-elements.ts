@@ -3,7 +3,7 @@ import Visitor from '@swc/visitor/Visitor.js'
 
 import * as swc from 'swc-ast-helpers'
 
-import { hasDecorator, getClassDeclaration } from '../utils'
+import { hasDecorator, getClassDeclaration } from '@/utils'
 
 const customElementStatement = (tag: string, element: string) => {
   return swc.createExpressionStatement(

@@ -4,9 +4,7 @@ import { createFilter } from '@rollup/pluginutils'
 import { createRequire } from 'module'
 
 import { transformer } from './transform'
-import { customElementTransformer } from './decorators/custom-elements'
-import { inlinePropertyTransformer } from './decorators/property'
-import { rewriteImportStylesTransformer } from './decorators/rewrite-import-styles'
+import { customElementTransformer, inlinePropertyTransformer, rewriteImportStylesTransformer, inlineQueryTransformer } from './decorators/decorators'
 import { transform } from './lit-css'
 import { Options, Output } from './types'
 
@@ -37,12 +35,6 @@ export function inlineLitElement(options?: Options) {
   const filter = createFilter(/\.(ts|s?css|js)$/i)
   const cssFilter = createFilter(/\.(s?css)$/i)
 
-  const plugins: import('@swc/core').Plugin[] = [
-    inlinePropertyTransformer(),
-    rewriteImportStylesTransformer(),
-    customElementTransformer()
-  ]
-
   const plugin: import('rollup').Plugin = {
     name: 'inlineLitElement',
     load(id: string) {
@@ -52,7 +44,12 @@ export function inlineLitElement(options?: Options) {
     transform(code: string, id: string) {
       if (!filter(id)) return null
       if (cssFilter(id)) return transformStyle(code, id, options)
-      return transformer(getContent(code, id, options), id, plugins)
+      return transformer(getContent(code, id, options), id, [
+        inlinePropertyTransformer(),
+        inlineQueryTransformer(),
+        rewriteImportStylesTransformer(),
+        customElementTransformer()
+      ])
     },
     ...(options?.enforce 
       ? { enforce: options.enforce }

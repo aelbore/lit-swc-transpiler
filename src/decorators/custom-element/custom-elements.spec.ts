@@ -1,4 +1,4 @@
-import { transformer } from '../transform'
+import { transformer } from '@/transform'
 import { customElementTransformer } from './custom-elements'
 
 describe('CustomElementPlugin', () => {

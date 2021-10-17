@@ -1,6 +1,6 @@
 import { expect } from '@qoi/test'
 
-import { transformer } from '../transform'
+import { transformer } from '@/transform'
 import { rewriteImportStylesTransformer } from './rewrite-import-styles'
 
 describe('property decorator', () => {
