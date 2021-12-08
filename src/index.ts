@@ -4,9 +4,14 @@ import { createFilter } from '@rollup/pluginutils'
 import { createRequire } from 'module'
 
 import { transformer } from './transform'
-import { customElementTransformer, inlinePropertyTransformer, rewriteImportStylesTransformer, inlineQueryTransformer } from './decorators/decorators'
 import { transform } from './lit-css'
 import { Options, Output } from './types'
+import { 
+  customElementTransformer, 
+  inlinePropertyTransformer, 
+  rewriteImportStylesTransformer, 
+  inlineQueryTransformer 
+} from './decorators/decorators'
 
 const getMinifyHTMLLiterals = () => {
   const htmlLiterals = join(resolve('node_modules'), 'minify-html-literals')
@@ -31,6 +36,15 @@ const getContent = (code: string, id: string, options?: Options) => {
   return code
 }
 
+export function transformLit(code: string, id: string, options?: Options) {
+  return transformer(getContent(code, id, options || {}), id, [
+    inlinePropertyTransformer(),
+    inlineQueryTransformer(),
+    rewriteImportStylesTransformer(),
+    customElementTransformer()
+  ])
+}
+
 export function inlineLitElement(options?: Options) {
   const filter = createFilter(/\.(ts|s?css|js)$/i)
   const cssFilter = createFilter(/\.(s?css)$/i)
@@ -44,12 +58,7 @@ export function inlineLitElement(options?: Options) {
     transform(code: string, id: string) {
       if (!filter(id)) return null
       if (cssFilter(id)) return transformStyle(code, id, options)
-      return transformer(getContent(code, id, options), id, [
-        inlinePropertyTransformer(),
-        inlineQueryTransformer(),
-        rewriteImportStylesTransformer(),
-        customElementTransformer()
-      ])
+      return transformLit(code, id, options)
     },
     ...(options?.enforce 
       ? { enforce: options.enforce }
