@@ -6,12 +6,7 @@ import { createRequire } from 'module'
 import { transformer } from './transform'
 import { transform } from './lit-css'
 import { Options, Output } from './types'
-import { 
-  customElementTransformer, 
-  inlinePropertyTransformer, 
-  rewriteImportStylesTransformer, 
-  inlineQueryTransformer 
-} from './decorators/decorators'
+import { customElementTransformer, inlinePropertyTransformer, rewriteImportStylesTransformer, inlineQueryTransformer } from './decorators/decorators'
 
 const getMinifyHTMLLiterals = () => {
   const htmlLiterals = join(resolve('node_modules'), 'minify-html-literals')
@@ -36,7 +31,7 @@ const getContent = (code: string, id: string, options?: Options) => {
   return code
 }
 
-export function transformLit(code: string, id: string, options?: Options) {
+const transformLit = (code: string, id: string, options?: Options) => {
   return transformer(getContent(code, id, options || {}), id, [
     inlinePropertyTransformer(),
     inlineQueryTransformer(),
@@ -66,6 +61,24 @@ export function inlineLitElement(options?: Options) {
   }
 
   return plugin 
+}
+
+export function viteLit() {
+  const filter = createFilter(/\.(ts|js)$/i);
+  const plugin: import('vite').Plugin = {
+    name: 'vite-lit',
+    enforce: 'pre',
+    configureServer(server: import('vite').ViteDevServer) {
+      server.watcher.on('change', (path: string) => {
+        server.ws.send({ type: 'full-reload', path })
+      })
+    },
+    transform(code: string, id: string) {
+      if (!filter(id)) return null;
+      return transformLit(code, id)
+    }
+  }
+  return plugin
 }
 
 export * from './lit-css'

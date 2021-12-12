@@ -1,5 +1,5 @@
 import type { Decorator, Module, ObjectExpression, ClassProperty, Identifier, ClassMember, Program, CallExpression, KeyValueProperty } from '@swc/core'
-import Visitor from '@swc/visitor/Visitor.js'
+import Visitor from '@qoi/visitor/Visitor.js'
 
 import * as swc from 'swc-ast-helpers'
 import { hasDecorator, isClasDeclaration, getClassDeclaration, updateMembers } from '@/utils'

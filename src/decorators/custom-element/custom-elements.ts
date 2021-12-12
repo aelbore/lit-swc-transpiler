@@ -1,5 +1,5 @@
 import type { Module, Decorator, StringLiteral, Program, CallExpression } from '@swc/core'
-import Visitor from '@swc/visitor/Visitor.js'
+import Visitor from '@qoi/visitor/Visitor.js'
 
 import * as swc from 'swc-ast-helpers'
 
