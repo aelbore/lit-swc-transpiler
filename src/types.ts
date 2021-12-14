@@ -3,6 +3,7 @@ export interface Options {
   swcOptions?: import('@swc/core').Options
   litcss?: Omit<LitCssOptions, 'code' | 'id'>
   minifyHTMLLiterals?: boolean
+  env?: 'development' | 'production'
 }
 
 export interface Output {

@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-lit-transformer",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "",
   "type": "module",
   "scripts": {
@@ -31,7 +31,7 @@
   },
   "dependencies": {
     "@qoi/visitor": "^0.0.1",
-    "swc-ast-helpers": "^0.0.6"
+    "swc-ast-helpers": "^0.0.7"
   },
   "devDependencies": {
     "@qoi/build": "^0.0.19",
@@ -52,8 +52,8 @@
     "sinon": "^12.0.1",
     "string-to-template-literal": "^2.0.0",
     "tsconfig-paths": "^3.12.0",
-    "typescript": "^4.5.3",
-    "vite": "^2.7.1"
+    "typescript": "^4.5.4",
+    "vite": "^2.7.2"
   },
   "qoi": {
     "ignore": [

@@ -1658,10 +1658,10 @@ supports-color@^7.1.0, supports-color@^7.2.0:
   dependencies:
     has-flag "^4.0.0"
 
-swc-ast-helpers@^0.0.6:
-  version "0.0.6"
-  resolved "https://registry.yarnpkg.com/swc-ast-helpers/-/swc-ast-helpers-0.0.6.tgz#df2a4e95cd79f1759b45e26665ec5cd05192b542"
-  integrity sha512-5edG/xfc/kVvD2/XZvHIHDgoEcCigimmO8kIukGO12grgENvAkwJyr5LOWLCuVZyYBK+iESM/CUvHFVecoLqLg==
+swc-ast-helpers@^0.0.7:
+  version "0.0.7"
+  resolved "https://registry.yarnpkg.com/swc-ast-helpers/-/swc-ast-helpers-0.0.7.tgz#5ab243f70eb61bc2ec0ad9371c9462cf9603aecb"
+  integrity sha512-dgXaLc/X867LU4FIhC3werXUqq619FNHwJmSm3mv/rZJnhB6dP4lT+CoxqwjolOECgqYLY+81kzW4lvhJgW0kA==
 
 to-fast-properties@^2.0.0:
   version "2.0.0"
@@ -1700,10 +1700,10 @@ type-detect@4.0.8, type-detect@^4.0.0, type-detect@^4.0.5, type-detect@^4.0.8:
   resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.3.5.tgz#4d1c37cc16e893973c45a06886b7113234f119f4"
   integrity sha512-DqQgihaQ9cUrskJo9kIyW/+g0Vxsk8cDtZ52a3NGh0YNTfpUSArXSohyUGnvbPazEPLu398C0UxmKSOrPumUzA==
 
-typescript@^4.5.3:
-  version "4.5.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.3.tgz#afaa858e68c7103317d89eb90c5d8906268d353c"
-  integrity sha512-eVYaEHALSt+s9LbvgEv4Ef+Tdq7hBiIZgii12xXJnukryt3pMgJf6aKhoCZ3FWQsu6sydEnkg11fYXLzhLBjeQ==
+typescript@^4.5.4:
+  version "4.5.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.5.4.tgz#a17d3a0263bf5c8723b9c52f43c5084edf13c2e8"
+  integrity sha512-VgYs2A2QIRuGphtzFV7aQJduJ2gyfTljngLzjpfW9FoYZF6xuw1W0vW9ghCKLfcWrCFxK81CSGRAvS1pn4fIUg==
 
 uglify-js@^3.5.1:
   version "3.14.1"
@@ -1715,10 +1715,10 @@ upper-case@^1.1.1:
   resolved "https://registry.yarnpkg.com/upper-case/-/upper-case-1.1.3.tgz#f6b4501c2ec4cdd26ba78be7222961de77621598"
   integrity sha1-9rRQHC7EzdJrp4vnIilh3ndiFZg=
 
-vite@^2.7.1:
-  version "2.7.1"
-  resolved "https://registry.yarnpkg.com/vite/-/vite-2.7.1.tgz#be50ad13214290ecbebbe5ad389ed423cb5f137e"
-  integrity sha512-TDXXhcu5lyQ6uosK4ZWaOyB4VzOiizk0biitRzDzaEtgSUi8rVYPc4k1xgOjLSf0OuceDJmojFKXHOX9DB1WuQ==
+vite@^2.7.2:
+  version "2.7.2"
+  resolved "https://registry.yarnpkg.com/vite/-/vite-2.7.2.tgz#f9937114cf2e730a7e2e4c4f8c26ed0ed1c3bb6b"
+  integrity sha512-wMffVVdKZRZP/HwW3yttKL8X+IJePz7bUcnGm0vqljffpVwHpjWC3duZtJQHAGvy+wrTjmwU7vkULpZ1dVXY6w==
   dependencies:
     esbuild "^0.13.12"
     postcss "^8.3.11"
