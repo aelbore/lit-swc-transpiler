@@ -1,10 +1,12 @@
 /* istanbul ignore file */
 import { transformSync, plugins, Plugin } from '@swc/core'
 
-export function transformer(code: string, 
-  id: string, 
+export interface TransformerOptions  {
   transformers?: Plugin[]
-) {
+  paths?: {[key: string]: [string]}
+}
+
+export function transformer(code: string, id: string, options?: TransformerOptions) {
   return transformSync(code, {
     jsc: {
       parser: {
@@ -13,11 +15,13 @@ export function transformer(code: string,
         dynamicImport: true,
         tsx: true
       },
-      target: 'es2020'
+      target: 'es2020',
+      baseUrl: '.',
+      paths: options?.paths || {}
     },
     filename: id,
     sourceMaps: true,
     isModule: true,
-    plugin: plugins(transformers || [])
+    plugin: plugins(options?.transformers || [])
   })
 }

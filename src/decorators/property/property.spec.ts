@@ -20,7 +20,9 @@ describe('property decorator', () => {
   `
 
   it('shoule transform property to static get properties', () => {
-    const output = transformer(content, './src/hello-world.ts', [ inlinePropertyTransformer() ])
+    const output = transformer(content, './src/hello-world.ts', {
+      transformers: [ inlinePropertyTransformer() ]
+    })
     console.log(output)
   })
 

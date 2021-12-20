@@ -15,9 +15,10 @@ describe('property decorator', () => {
   `
 
   it('shoule rewrite import styles', () => {
-    const output = transformer(content, './src/hello-world.ts', [ rewriteImportStylesTransformer() ])
+    const output = transformer(content, './src/hello-world.ts', {
+      transformers: [ rewriteImportStylesTransformer() ]
+    })
     console.log(output)
-
   })
 
 })

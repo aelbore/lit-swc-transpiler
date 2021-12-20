@@ -12,10 +12,9 @@ describe('CustomElementPlugin', () => {
     `
 
     const output = transformer(content, 
-      './src/hello-world.ts', 
-      [
-        customElementTransformer()
-      ])
+      './src/hello-world.ts', {
+        transformers: [ customElementTransformer() ]
+      })
 
     console.log(output)
 

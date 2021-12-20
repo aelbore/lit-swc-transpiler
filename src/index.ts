@@ -5,7 +5,7 @@ import { createRequire } from 'module'
 
 import { transformer } from './transform'
 import { transform } from './lit-css'
-import { Options, Output } from './types'
+import { Options, Output, PathKeyValue } from './types'
 import { transpileStylesTransformer } from './styles/transpile'
 import { customElementTransformer, inlinePropertyTransformer, rewriteImportStylesTransformer, inlineQueryTransformer } from './decorators/decorators'
 
@@ -45,12 +45,14 @@ export function inlineLitElement(options?: Options) {
     transform(code: string, id: string) {
       if (!filter(id)) return null
       if (cssFilter(id)) return transformStyle(code, id, options)
-      return transformer(getContent(code, id, options || {}), id, [
-        inlinePropertyTransformer(),
-        inlineQueryTransformer(),
-        rewriteImportStylesTransformer(),
-        customElementTransformer()
-      ])
+      return transformer(getContent(code, id, options || {}), id, {
+        transformers: [
+          inlinePropertyTransformer(),
+          inlineQueryTransformer(),
+          rewriteImportStylesTransformer(),
+          customElementTransformer()
+        ]
+      })
     },
     ...(options?.enforce 
       ? { enforce: options.enforce }
@@ -72,13 +74,18 @@ export function viteLit(options?: Options) {
       })
     },
     transform(code: string, id: string) {
-      if (!filter(id)) return null;
-      return transformer(getContent(code, id, options || {}), id, [
-        ...(env.includes('development') ? [ rewriteImportStylesTransformer() ]: [ transpileStylesTransformer(id) ]),
-        inlinePropertyTransformer(),
-        inlineQueryTransformer(),
-        customElementTransformer()
-      ])
+      if (!filter(id)) return null;      
+      return transformer(getContent(code, id, options || {}), id, {
+        paths: options?.paths,
+        transformers: [
+          ...(env.includes('development') 
+                ? [ rewriteImportStylesTransformer() ]
+                : [ transpileStylesTransformer(id, options?.paths) ]),
+          inlinePropertyTransformer(),
+          inlineQueryTransformer(),
+          customElementTransformer()
+        ]
+      })
     }
   }
   return plugin

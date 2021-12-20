@@ -15,7 +15,9 @@ describe('query decorator', () => {
   `
 
   it('shoule transform property to static get properties', () => {
-    const output = transformer(content, './src/hello-world.ts', [ inlineQueryTransformer() ])
+    const output = transformer(content, './src/hello-world.ts', {
+      transformers: [ inlineQueryTransformer() ]
+    })
     console.log(output)
   })
 
