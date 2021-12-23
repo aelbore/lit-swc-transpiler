@@ -9,12 +9,6 @@ import { Options, Output } from './types'
 import { transpileStylesTransformer } from './styles/transpile'
 import { customElementTransformer, inlinePropertyTransformer, rewriteImportStylesTransformer, inlineQueryTransformer } from './decorators/decorators'
 
-const commonPlugins = () => [
-  inlineQueryTransformer(),
-  rewriteImportStylesTransformer(),
-  customElementTransformer()
-]
-
 const getMinifyHTMLLiterals = () => {
   const htmlLiterals = join(resolve('node_modules'), 'minify-html-literals')
   const { minifyHTMLLiterals } = createRequire(htmlLiterals)(htmlLiterals)
@@ -52,7 +46,12 @@ export function inlineLitElement(options?: Options) {
       if (!filter(id)) return null
       if (cssFilter(id)) return transformStyle(code, id, options)
       return transformer(getContent(code, id, options || {}), id, {
-        transformers: [ inlinePropertyTransformer(), ...commonPlugins() ]
+        transformers: [ 
+          rewriteImportStylesTransformer(),
+          inlinePropertyTransformer(),
+          inlineQueryTransformer(),
+          customElementTransformer()
+        ]
       })
     },
     ...(options?.enforce 
@@ -69,7 +68,7 @@ export function viteLit(options?: Options) {
   const plugin: import('vite').Plugin = {
     name: 'vite-lit',
     enforce: 'pre',
-    configureServer({ watcher, ws }: import('vite').ViteDevServer) {
+    configureServer({ watcher, ws, config }: import('vite').ViteDevServer) {
       watcher.on('change', (path: string) => {
         ws.send({ type: 'full-reload', path })
       })
@@ -79,10 +78,13 @@ export function viteLit(options?: Options) {
       return transformer(getContent(code, id, options || {}), id, {
         paths: options?.paths,
         transformers: [
-          ...(env.includes('development') 
+          ...(env.toLowerCase().includes('development') 
             ? [ rewriteImportStylesTransformer() ]
             : [ transpileStylesTransformer(id, options?.paths) ]),
-          ...commonPlugins()
+            inlinePropertyTransformer(),
+            inlineQueryTransformer(),
+            rewriteImportStylesTransformer(),
+            customElementTransformer()
         ]
       })
     }

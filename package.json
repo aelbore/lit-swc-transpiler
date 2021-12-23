@@ -1,11 +1,11 @@
 {
   "name": "rollup-plugin-lit-transformer",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "",
   "type": "module",
   "scripts": {
     "build": "qoi build -f es,cjs --dts --emptyOutDir --resolve string-to-template-literal --external @swc/core,@qoi/visitor/Visitor.js,@rollup/pluginutils",
-    "test": "qoi test ./src/styles/transpile.spec.ts"
+    "test": "qoi test ./src/transform.spec.ts"
   },
   "repository": {
     "type": "git",
