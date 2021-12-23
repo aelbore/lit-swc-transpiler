@@ -31,7 +31,6 @@
   },
   "dependencies": {
     "@qoi/visitor": "^0.0.1",
-    "@swc/core": "1.2.122",
     "swc-ast-helpers": "^0.0.7"
   },
   "devDependencies": {
