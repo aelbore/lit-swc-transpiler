@@ -5,9 +5,15 @@ import { createRequire } from 'module'
 
 import { transformer } from './transform'
 import { transform } from './lit-css'
-import { Options, Output, PathKeyValue } from './types'
+import { Options, Output } from './types'
 import { transpileStylesTransformer } from './styles/transpile'
 import { customElementTransformer, inlinePropertyTransformer, rewriteImportStylesTransformer, inlineQueryTransformer } from './decorators/decorators'
+
+const commonPlugins = () => [
+  inlineQueryTransformer(),
+  rewriteImportStylesTransformer(),
+  customElementTransformer()
+]
 
 const getMinifyHTMLLiterals = () => {
   const htmlLiterals = join(resolve('node_modules'), 'minify-html-literals')
@@ -46,12 +52,7 @@ export function inlineLitElement(options?: Options) {
       if (!filter(id)) return null
       if (cssFilter(id)) return transformStyle(code, id, options)
       return transformer(getContent(code, id, options || {}), id, {
-        transformers: [
-          inlinePropertyTransformer(),
-          inlineQueryTransformer(),
-          rewriteImportStylesTransformer(),
-          customElementTransformer()
-        ]
+        transformers: [ inlinePropertyTransformer(), ...commonPlugins() ]
       })
     },
     ...(options?.enforce 
@@ -64,7 +65,7 @@ export function inlineLitElement(options?: Options) {
 
 export function viteLit(options?: Options) {
   const { env = 'development' } = options
-  const filter = createFilter(/\.(ts|js)$/i)
+  const filter = createFilter(/\.(ts|js)$/i, /node_modules/)
   const plugin: import('vite').Plugin = {
     name: 'vite-lit',
     enforce: 'pre',
@@ -79,11 +80,9 @@ export function viteLit(options?: Options) {
         paths: options?.paths,
         transformers: [
           ...(env.includes('development') 
-                ? [ rewriteImportStylesTransformer() ]
-                : [ transpileStylesTransformer(id, options?.paths) ]),
-          inlinePropertyTransformer(),
-          inlineQueryTransformer(),
-          customElementTransformer()
+            ? [ rewriteImportStylesTransformer() ]
+            : [ transpileStylesTransformer(id, options?.paths) ]),
+          ...commonPlugins()
         ]
       })
     }
