@@ -68,7 +68,7 @@ export function viteLit(options?: Options) {
   const plugin: import('vite').Plugin = {
     name: 'vite-lit',
     enforce: 'pre',
-    configureServer({ watcher, ws, config }: import('vite').ViteDevServer) {
+    configureServer({ watcher, ws }: import('vite').ViteDevServer) {
       watcher.on('change', (path: string) => {
         ws.send({ type: 'full-reload', path })
       })
@@ -76,7 +76,6 @@ export function viteLit(options?: Options) {
     transform(code: string, id: string) {
       if (!filter(id)) return null;      
       return transformer(getContent(code, id, options || {}), id, {
-        paths: options?.paths,
         transformers: [
           ...(env.toLowerCase().includes('development') 
             ? [ rewriteImportStylesTransformer() ]
