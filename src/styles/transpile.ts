@@ -1,4 +1,3 @@
-import Visitor from '@qoi/visitor/Visitor.js'
 import { Program, Module, ImportDeclaration, ModuleItem } from '@swc/core'
 import { resolve, dirname } from 'path'
 import { existsSync, readFileSync } from 'fs'
@@ -7,6 +6,8 @@ import * as swc from 'swc-ast-helpers'
 import { getClassDeclaration } from '@/utils'
 import { getSass } from '@/lit-css'
 import { PathKeyValue } from '@/types'
+
+import Visitor from '@swc/core/Visitor.js'
 
 const isImportStyle = (item: ModuleItem) => {
   return (swc.isImportDeclaration(item) 
@@ -39,12 +40,12 @@ const getImportStyles = (file: string, items: ModuleItem[], paths?: PathKeyValue
 const createTaggeTemplateExpression = (style: string) => {
   return swc.createTaggedTemplateExpression(
     swc.createIdentifer('css'),
-    swc.createTemplateLiteral([ swc.createTemplateElement(style) ]))
+    swc.createTemplateLiteral([ swc.createTemplateElement(style, true) ]))
 }
 
 const createStylesStatement = (element: string, elements: string[]) => {
   return swc.createExpressionStatement(
-    swc.createAssingmentExpression(
+    swc.createAssignmentExpression(
       swc.createMemberExpression(swc.createIdentifer(element), swc.createIdentifer('styles')),
       swc.createArrayExpression(
         elements.reverse().map(element =>

@@ -46,7 +46,7 @@ describe('transpileStylesTransformer', () => {
     mock(sassPath, getSass())
   })
 
-  xit('should transpile css styles', async () => {
+  it('should transpile css styles', async () => {
     mockfs({
       './src/index.ts': `
         import { LitElement, property } from 'lit'
@@ -102,7 +102,7 @@ describe('transpileStylesTransformer', () => {
     console.log(output.output[0].code)
   })
 
-  it('should transpile scss styles using paths', async () => {
+  xit('should transpile scss styles using paths', async () => {
     mockfs({
       './src/index.ts': `
         import { LitElement, property } from 'lit'

@@ -23,7 +23,7 @@ describe('property decorator', () => {
     const output = transformer(content, './src/hello-world.ts', {
       transformers: [ inlinePropertyTransformer() ]
     })
-    console.log(output)
+    console.log(output.code)
   })
 
 })

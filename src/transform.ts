@@ -6,7 +6,10 @@ export interface TransformerOptions  {
   paths?: {[key: string]: [string]}
 }
 
-export function transformer(code: string, id: string, options?: TransformerOptions) {
+export function transformer(code: string, 
+  id: string, 
+  options?: TransformerOptions
+) {
   return transformSync(code, {
     jsc: {
       parser: {

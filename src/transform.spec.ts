@@ -32,9 +32,7 @@ describe('property decorator', () => {
     const bundle = await rollup({
       input,
       external: [ 'lit', 'lit/decorators' ],
-      plugins: [ 
-        viteLit({ env: 'production', ...options })
-      ]
+      plugins: [ viteLit({ env: 'production', ...options }) ]
     })
     const output = await bundle.generate({
       file: './dist/index.js',
@@ -281,7 +279,7 @@ describe('property decorator', () => {
           @property() message: string
           @query('abc-menu') menu: HTMLElement
           @queryAll('.my-class-query') classQuery: HTMLElement
-          cl
+
           render() {
             return html ${stringToTemplateLiteral('<p>Hello ${this.message}</p>')} 
           }

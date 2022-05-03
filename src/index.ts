@@ -65,7 +65,7 @@ export function inlineLitElement(options?: Options) {
 export function viteLit(options?: Options) {
   const { env = 'development' } = options
   const filter = createFilter(/\.(ts|js)$/i, /node_modules/)
-  const plugin: import('vite').Plugin = {
+  return {
     name: 'vite-lit',
     enforce: 'pre',
     configureServer({ watcher, ws }: import('vite').ViteDevServer) {
@@ -75,11 +75,14 @@ export function viteLit(options?: Options) {
     },
     transform(code: string, id: string) {
       if (!filter(id)) return null;      
+      
+      const stylePaths = env.toLowerCase().includes('development') 
+        ? [ rewriteImportStylesTransformer() ]
+        : [ transpileStylesTransformer(id, options?.paths) ]
+
       return transformer(getContent(code, id, options || {}), id, {
         transformers: [
-          ...(env.toLowerCase().includes('development') 
-            ? [ rewriteImportStylesTransformer() ]
-            : [ transpileStylesTransformer(id, options?.paths) ]),
+            ...stylePaths,
             inlinePropertyTransformer(),
             inlineQueryTransformer(),
             rewriteImportStylesTransformer(),
@@ -87,8 +90,7 @@ export function viteLit(options?: Options) {
         ]
       })
     }
-  }
-  return plugin
+  } as false | import('rollup').Plugin
 }
 
 export * from './lit-css'

@@ -1,5 +1,5 @@
 import type { ImportDeclaration, Program, Module, ExprOrSpread, ModuleItem, Identifier } from '@swc/core'
-import Visitor from '@qoi/visitor/Visitor.js'
+import Visitor from '@swc/core/Visitor.js'
 
 import * as swc from 'swc-ast-helpers'
 
@@ -24,7 +24,7 @@ const getStyles = (items: ModuleItem[]) => {
 
 const createStylesStatement = (element: string, elements: Identifier[]) => {
   return swc.createExpressionStatement(
-    swc.createAssingmentExpression(
+    swc.createAssignmentExpression(
       swc.createMemberExpression(swc.createIdentifer(element), swc.createIdentifer('styles')),
       swc.createArrayExpression(elements.map(el => ({ expression: el } as ExprOrSpread)).reverse())
     )

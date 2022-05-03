@@ -1,7 +1,7 @@
 import type { Decorator, Module, ObjectExpression, ClassProperty, Identifier, ClassMember, Program, CallExpression, KeyValueProperty } from '@swc/core'
-import Visitor from '@qoi/visitor/Visitor.js'
-
+import Visitor from '@swc/core/Visitor.js'
 import * as swc from 'swc-ast-helpers'
+
 import { hasDecorator, isClasDeclaration, getClassDeclaration, updateMembers } from '@/utils'
 
 const hasMemberProperty = (member: ClassMember) => 
@@ -14,14 +14,16 @@ const createProperties = (members: ClassMember[]) => {
       const args = ((member.decorators[0] as Decorator).expression as CallExpression).arguments?.[0]?.expression as ObjectExpression
       const prop =  (member.key as Identifier).value
       return swc.createKeyValueProperty(prop, 
-        swc.createObjectExpression(args?.properties ?? [ swc.createKeyValueProperty('type', swc.createIdentifer('String')) ])
-      )
+        swc.createObjectExpression(
+          args?.properties 
+          ?? [ swc.createKeyValueProperty('type', swc.createIdentifer('String')) ]
+        ))
     })
 }
 
 const createPropertiesStatement = (element: string, properties: KeyValueProperty[]) => {
   return swc.createExpressionStatement(
-    swc.createAssingmentExpression(
+    swc.createAssignmentExpression(
       swc.createMemberExpression(swc.createIdentifer(element), swc.createIdentifer('properties')),
       swc.createObjectExpression(properties)
     ))
@@ -34,13 +36,17 @@ class ProperyDecorator extends Visitor {
     if (moduleItem) {
       const members = moduleItem.body.filter(member => hasMemberProperty(member))
       const properties = createProperties(members)
-      const toUpdateMember = () => updateMembers(moduleItem.body, ['property']);
       if (properties?.length > 0) {
+        const toUpdateMember = () => updateMembers(moduleItem.body, ['property']);
         e.body.forEach(content => {
           if (swc.isClasDeclaration(content) && isClasDeclaration(content)) {
             content.body = toUpdateMember()
           }
-          if (swc.isExportDeclaration(content) && swc.isClasDeclaration(content.declaration) && isClasDeclaration(content.declaration)) {
+          if (
+            swc.isExportDeclaration(content) 
+            && swc.isClasDeclaration(content.declaration) 
+            && isClasDeclaration(content.declaration)
+          ) {
             content.declaration.body = toUpdateMember()
           }
         })

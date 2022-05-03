@@ -1,6 +1,6 @@
 import type { Decorator, Module, StringLiteral, ClassProperty, Identifier, ClassMember, Program, CallExpression } from '@swc/core'
 
-import Visitor from '@qoi/visitor/Visitor.js'
+import Visitor from '@swc/core/Visitor.js'
 import { hasDecorator, isClasDeclaration, getClassDeclaration, updateMembers } from '@/utils'
 
 import * as swc from 'swc-ast-helpers'
@@ -16,7 +16,7 @@ const hasQueryState = (member: ClassMember, key: string) =>
 const createQueryGetters = (members: ClassMember[]) => {
   return members.map((member: ClassProperty) => {
     const expression = ((member.decorators[0] as Decorator)?.expression as CallExpression).arguments?.[0]?.expression as StringLiteral
-    const shadowRoot = swc.createMemberExpression(swc.createThisExpression(), swc.createIdentifer('shadowRoot'))
+    const shadowRoot = swc.createMemberExpression(swc.createThisExpression(), swc.createIdentifer('renderRoot'))
     const value = (((member.decorators[0] as Decorator)?.expression as CallExpression)?.callee as Identifier)?.value
     return swc.createGetter(member.key as Identifier, swc.createBlockStatement([
       swc.createReturnStatement(
